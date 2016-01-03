@@ -129,13 +129,13 @@
 					<div class="panel-heading">Result Filters</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label for="size">Habitat Results</label>
+							<label for="size">Number of Total Results</label>
 							<input type="number" class="form-control" name="habitats[size]" id="size" placeholder="Number"
 								   value="{{ $inputs['habitats']['size'] or '100' }}">
 						</div>
 
 						<div class="form-group">
-							<label for="points">Habitat Exact Size (comma seperated)</label>
+							<label for="points">Castle Exact Size (comma seperated)</label>
 							<input type="number" class="form-control" name="habitats[points]" id="points" placeholder="Number[, Number, ...]"
 							@if( !empty($inputs['habitats']['points']) )
 								@if( is_array($inputs['habitats']['points']) )
@@ -147,7 +147,7 @@
 									>
 						</div>
 						<div class="form-group">
-							<label for="min">Habitat Minimum Size</label>
+							<label for="min">Castle Minimum Size</label>
 							<select class="form-control" id="min" name="habitats[min]">
 								@if( !empty($inputs['habitats']['min']) && $inputs['habitats']['min'] > 0 )
 									<option>{{$inputs['habitats']['min']}}</option>
@@ -164,7 +164,7 @@
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="max">Habitat Maximum Size</label>
+							<label for="max">Castle Maximum Size</label>
 							<select class="form-control" id="max" name="habitats[max]">
 								@if( !empty($inputs['habitats']['max']) && $inputs['habitats']['max'] > 0 )
 									<option>{{$inputs['habitats']['max']}}</option>
@@ -181,14 +181,14 @@
 							</select>
 						</div>
 
-						<div class="form-group">
+{{--						<div class="form-group">
 							<label for="max">Alliances</label>
 							<select multiple class="form-control" id="max" name="habitats[alliances][]">
 								@foreach( $alliances as $id=>$data )
 									<option value="{{ $id }}">{{ $data['name'] }}</option>
 								@endforeach
 							</select>
-						</div>
+						</div>--}}
 						<div class="form-group">
 							<label for="alliancesIDs">Alliance IDs (comma seperated)</label>
 							<input type="number" class="form-control" name="habitats[alliancesIDs]" id="alliancesIDs" placeholder="Number[, Number, ...]"
@@ -202,14 +202,14 @@
 							>
 						</div>
 
-						<div class="form-group">
+{{--						<div class="form-group">
 							<label for="max">Players</label>
 							<select multiple class="form-control" id="max" name="habitats[players][]">
 								@foreach( $players as $id=>$data )
 									<option value="{{ $id }}">{{ $data['nick'] }}</option>
 								@endforeach
 							</select>
-						</div>
+						</div>--}}
 						<div class="form-group">
 							<label for="playerIDs">Player IDs (comma seperated)</label>
 							<input type="number" class="form-control" name="habitats[playerIDs]" id="playerIDs" placeholder="Number[, Number, ...]"
