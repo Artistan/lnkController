@@ -160,6 +160,7 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
     private function process($type){
         if(!empty($this->inputs[$type]['min'])){
             $this->inputs[$type]['min']=200;
+            $this->inputs[$type]['max']=2000;// default the max...
         }
         if(!empty($this->inputs[$type]['max'])){
             $this->inputs[$type]['max']=2000;

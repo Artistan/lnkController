@@ -36,7 +36,13 @@
 			font-size: 32px;
 			margin: 16px 0 0 0;
 		}
-	</style>
+	</style>{{--
+
+	<script>
+		navigator.registerProtocolHandler("",
+				"https://www.google.co.uk/?uri=%s",
+				"Burger handler");
+	</script>--}}
 </head>
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
