@@ -16,7 +16,29 @@
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
-	
+	<script>
+		function split_op(selector){
+			var plan = jQuery(selector).val();
+			var plans = plan.match(/[\s\S]{1,650}\n\n\n/g) || [];
+			var total = plans.length;
+			jQuery('#split_op').empty();
+			$.each(plans, function( index, value ) {
+				jQuery('<h1/>', {
+					html: 'OP: '+(index+1)+'/'+total,
+					style: 'width: 100%; margin: 10px 0px; padding: 10px 0px;'
+				}).appendTo('#split_op');
+				jQuery('<textarea/>', {
+					id: 'op'+index,
+					html: value,
+					style: 'width: 100%; margin: 1em; padding: 1em;'
+				}).appendTo('#split_op');
+				jQuery('<hr/>').appendTo('#split_op');
+			});
+		}
+		function clear_op(){
+			jQuery('#split_op').empty();
+		}
+	</script>
 	<style>
 
 		body {
@@ -336,7 +358,7 @@
 	<div class="container">
 		<h1>Copy from here.</h1>
 		<!-- Example row of columns -->
-		<textarea name="plan" style="width:100%;height:10em;">
+		<textarea name="plan" id="plan" style="width:100%;height:10em;">
 @if( !empty($habitats) )
 @foreach ($habitats as $id => $castle)
 @if( !empty($inputs['playerInfo']) && !empty($castle['playerID']) && !empty($players[$castle['playerID']]) )
@@ -345,7 +367,11 @@
 @if( !empty($inputs['allianceInfo']) && !empty($castle['allianceID']) && !empty($alliances[$castle['allianceID']]) )
 {{ $alliances[$castle['allianceID']]['name'] }} ({{ $alliances[$castle['allianceID']]['points'] }})
 @endif
-[{{ $castle['points'] }} points]: @if( !empty($castle['name']) ){{  $castle['name'] }}@elseFree Castle {{  $id }}@endif
+[{{ $castle['points'] }} points]: @if( !empty($castle['name']) )
+	{{  $castle['name'] }}
+@else
+Free Castle {{  $id }}
+@endif
 l+k://coordinates?{{ $castle['mapX'] }},{{ $castle['mapY'] }}&{{ $inputs['server'] }}
 @if( !empty($inputs['distance']) )
 Distance:{{ $castle['_search_score'] }}
@@ -359,6 +385,9 @@ $ 💰:
 @endforeach
 @endif
 		</textarea>
+		<button class="btn btn-primary" onclick="split_op('#plan');">Split Op</button>
+		<button class="btn btn-warning" onclick="clear_op();">Clear Op Splits</button>
+		<div id="split_op"></div>
 	</div>
 
 	<div class="container">
