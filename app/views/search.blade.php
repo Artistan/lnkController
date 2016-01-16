@@ -334,6 +334,35 @@
 	</div>
 
 	<div class="container">
+		<h1>Copy from here.</h1>
+		<!-- Example row of columns -->
+		<textarea name="plan" style="width:100%;height:10em;">
+@if( !empty($habitats) )
+@foreach ($habitats as $id => $castle)
+@if( !empty($inputs['playerInfo']) && !empty($castle['playerID']) && !empty($players[$castle['playerID']]) )
+{{ $players[$castle['playerID']]['nick'] }} ({{ $players[$castle['playerID']]['points'] }} / #{{ $players[$castle['playerID']]['rank'] }})
+@endif
+@if( !empty($inputs['allianceInfo']) && !empty($castle['allianceID']) && !empty($alliances[$castle['allianceID']]) )
+{{ $alliances[$castle['allianceID']]['name'] }} ({{ $alliances[$castle['allianceID']]['points'] }})
+@endif
+[{{ $castle['points'] }} points]: @if( !empty($castle['name']) ){{  $castle['name'] }}@elseFree Castle {{  $id }}@endif
+l+k://coordinates?{{ $castle['mapX'] }},{{ $castle['mapY'] }}&{{ $inputs['server'] }}
+@if( !empty($inputs['distance']) )
+Distance:{{ $castle['_search_score'] }}
+@endif
+@if( !empty($inputs['ops']) )
+$ 💰:
++ 💣:
+@endif
+
+
+@endforeach
+@endif
+		</textarea>
+	</div>
+
+	<div class="container">
+		<h1>Linked list</h1>
 		<!-- Example row of columns -->
 		<div class="row">
 			<div class="col-md-4">
