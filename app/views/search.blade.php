@@ -381,7 +381,6 @@ $ 💰:
 + 💣:
 @endif
 
-
 @endforeach
 @endif
 		</textarea>
