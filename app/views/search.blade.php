@@ -19,7 +19,7 @@
 	<script>
 		function split_op(selector){
 			var plan = jQuery(selector).val();
-			var plans = plan.match(/[\s\S]{1,650}\n\n\n/g) || [];
+			var plans = plan.match(/[\s\S]{1,650}\n\n/g) || [];
 			var total = plans.length;
 			jQuery('#split_op').empty();
 			$.each(plans, function( index, value ) {
