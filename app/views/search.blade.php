@@ -367,7 +367,7 @@
 @if( !empty($inputs['allianceInfo']) && !empty($castle['allianceID']) && !empty($alliances[$castle['allianceID']]) )
 {{ $alliances[$castle['allianceID']]['name'] }} ({{ $alliances[$castle['allianceID']]['points'] }})
 @endif
-[{{ $castle['points'] }} points]: @if( !empty($castle['name']) )
+[{{ $castle['points'] }} pts] @if( !empty($castle['name']) )
 	{{  $castle['name'] }}
 @else
 Free Castle {{  $id }}
@@ -408,7 +408,7 @@ $ 💰:
 						</a>
 						<br/>
 					@endif
-					[{{ $castle['points'] }} points]:
+					[{{ $castle['points'] }} pts]
 					@if( !empty($castle['name']) )
 						{{  $castle['name'] }}
 					@else
