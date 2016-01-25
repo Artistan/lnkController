@@ -99,7 +99,7 @@
 		<div class="container">
 			<ol class="breadcrumb">
 				<li>
-					<a href='l+k://coordinates?{{ $origin['mapX'] }},{{ $origin['mapY'] }}&{{ $inputs['server'] }}'>
+					<a class="origin" href='l+k://coordinates?{{ $origin['mapX'] }},{{ $origin['mapY'] }}&{{ $inputs['server'] }}'>
 						Search Origin: {{ $origin['name'] or 'INVALID ORIGIN' }}
 					</a>
 				</li>
@@ -125,7 +125,7 @@
 						@endif
 						<div class="form-group">
 							<label for="max">Server</label>
-							<select class="form-control" id="server" name="server">
+							<select class="form-control" id="server" name="server" onchange="jQuery('#originX').val('');jQuery('#originY').val('')">
 								<option
 								@if( !empty($inputs['server']) && $inputs['server'] == 125 )
 									selected
@@ -136,6 +136,11 @@
 										@endif>US8</option>
 							</select>
 						</div>
+							<div class="form-group">
+								<label for="link">lnk Link</label>
+								<input type="text" class="form-control" id="link" placeholder="lnk://,,,"
+									   value="{{ $origin['mapX'] or '' }}">
+							</div>
 						<div class="form-group">
 							<label for="originX">Origin X</label>
 							<input type="number" class="form-control" name="originX" id="originX" placeholder="Number"
@@ -147,7 +152,7 @@
 								   value="{{ $origin['mapY'] or '' }}">
 						</div>
 
-						<a href='l+k://coordinates?{{ $origin['mapX'] }},{{ $origin['mapY'] }}&{{ $inputs['server'] }}'>
+						<a class="origin" href='l+k://coordinates?{{ $origin['mapX'] }},{{ $origin['mapY'] }}&{{ $inputs['server'] }}'>
 							l+k://coordinates?{{ $origin['mapX'] }},{{ $origin['mapY'] }}&{{ $inputs['server'] }}
 						</a>
 					</div>
@@ -164,7 +169,7 @@
 
 						<div class="form-group">
 							<label for="points">Castle Exact Size (comma seperated)</label>
-							<input type="number" class="form-control" name="habitats[points]" id="points" placeholder="Number[, Number, ...]"
+							<input type="text" class="form-control" name="habitats[points]" id="points" placeholder="Number[, Number, ...]"
 							@if( !empty($inputs['habitats']['points']) )
 								@if( is_array($inputs['habitats']['points']) )
 									value="{{ implode(',',$inputs['habitats']['points']) }}"
@@ -219,7 +224,7 @@
 						</div>--}}
 						<div class="form-group">
 							<label for="alliancesIDs">Alliance IDs (comma seperated)</label>
-							<input type="number" class="form-control" name="habitats[alliancesIDs]" id="alliancesIDs" placeholder="Number[, Number, ...]"
+							<input type="text" class="form-control" name="habitats[alliancesIDs]" id="alliancesIDs" placeholder="Number[, Number, ...]"
 							    @if( !empty($inputs['habitats']['alliancesIDs']) )
 									@if( is_array($inputs['habitats']['alliancesIDs']) )
 										value="{{ implode(',',$inputs['habitats']['alliancesIDs']) }}"
@@ -240,7 +245,7 @@
 						</div>--}}
 						<div class="form-group">
 							<label for="playerIDs">Player IDs (comma seperated)</label>
-							<input type="number" class="form-control" name="habitats[playerIDs]" id="playerIDs" placeholder="Number[, Number, ...]"
+							<input type="text" class="form-control" name="habitats[playerIDs]" id="playerIDs" placeholder="Number[, Number, ...]"
 								   @if( !empty($inputs['habitats']['playerIDs']) )
 								   @if( is_array($inputs['habitats']['playerIDs']) )
 								   value="{{ implode(',',$inputs['habitats']['playerIDs']) }}"

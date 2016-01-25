@@ -167,9 +167,9 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
         }
         if(!empty($this->inputs[$type]['points'])){
             if(is_array($this->inputs[$type]['points'])){
-                $this->inputs[$type]['must']['points']=$this->inputs[$type]['points'];
+                $this->inputs[$type]['should']['points']=$this->inputs[$type]['points'];
             } else {
-                $this->inputs[$type]['must']['points']=explode(',',$this->inputs[$type]['points']);
+                $this->inputs[$type]['should']['points']=explode(',',$this->inputs[$type]['points']);
             }
         }
         if($type=='habitats'){
@@ -179,32 +179,32 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
             }
             if(!empty($this->inputs[$type]['playerIDs'])){
                 if(is_array($this->inputs[$type]['playerIDs'])){
-                    $this->inputs[$type]['must']['playerID']=array_merge($this->inputs[$type]['playerIDs'],$this->inputs[$type]['players']);
+                    $this->inputs[$type]['should']['playerID']=array_merge($this->inputs[$type]['playerIDs'],$this->inputs[$type]['players']);
                 } else {
-                    $this->inputs[$type]['must']['playerID']=array_merge(explode(',',$this->inputs[$type]['playerIDs']), $this->inputs[$type]['players']);
+                    $this->inputs[$type]['should']['playerID']=array_merge(explode(',',$this->inputs[$type]['playerIDs']), $this->inputs[$type]['players']);
                 }
             } else if (!empty($this->inputs[$type]['players'])){
-                $this->inputs[$type]['must']['playerID'] = $this->inputs[$type]['players'];
+                $this->inputs[$type]['should']['playerID'] = $this->inputs[$type]['players'];
             }
-            if(!empty($this->inputs[$type]['must']['playerID'])){
-                $this->inputs[$type]['playerIDs'] = implode(',',$this->inputs[$type]['must']['playerID']);
-                $this->inputs[$type]['players'] = $this->inputs[$type]['must']['playerID'];
+            if(!empty($this->inputs[$type]['should']['playerID'])){
+                $this->inputs[$type]['playerIDs'] = implode(',',$this->inputs[$type]['should']['playerID']);
+                $this->inputs[$type]['players'] = $this->inputs[$type]['should']['playerID'];
             }
             if(empty($this->inputs[$type]['alliances'])){
                 $this->inputs[$type]['alliances']=array();
             }
             if(!empty($this->inputs[$type]['alliancesIDs'])){
                 if(is_array($this->inputs[$type]['alliancesIDs'])){
-                    $this->inputs[$type]['must']['allianceID']=array_merge($this->inputs[$type]['alliancesIDs'],$this->inputs[$type]['alliances']);
+                    $this->inputs[$type]['should']['allianceID']=array_merge($this->inputs[$type]['alliancesIDs'],$this->inputs[$type]['alliances']);
                 } else {
-                    $this->inputs[$type]['must']['allianceID']=array_merge(explode(',',$this->inputs[$type]['alliancesIDs']), $this->inputs[$type]['alliances']);
+                    $this->inputs[$type]['should']['allianceID']=array_merge(explode(',',$this->inputs[$type]['alliancesIDs']), $this->inputs[$type]['alliances']);
                 }
             } else if (!empty($this->inputs[$type]['alliances'])){
-                $this->inputs[$type]['must']['allianceID'] = $this->inputs[$type]['alliances'];
+                $this->inputs[$type]['should']['allianceID'] = $this->inputs[$type]['alliances'];
             }
-            if(!empty($this->inputs[$type]['must']['allianceID'])){
-                $this->inputs[$type]['alliancesIDs'] = implode(',',$this->inputs[$type]['must']['allianceID']);
-                $this->inputs[$type]['alliances'] = $this->inputs[$type]['must']['allianceID'];
+            if(!empty($this->inputs[$type]['should']['allianceID'])){
+                $this->inputs[$type]['alliancesIDs'] = implode(',',$this->inputs[$type]['should']['allianceID']);
+                $this->inputs[$type]['alliances'] = $this->inputs[$type]['should']['allianceID'];
             }
             if(empty($this->inputs[$type]['size'])){
                 $this->inputs[$type]['size']=100;
