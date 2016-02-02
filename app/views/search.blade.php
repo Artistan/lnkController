@@ -90,6 +90,21 @@
 							Query
 						</a>
 					</li>
+					<li>
+						<a href="http://lk.tavernbrawl.ch/LK-US-8/map/">
+							MAP
+						</a>
+					</li>
+					<li>
+						<a href="http://lordsandknights.enjoyed.today/SelfTrickle/">
+							Trickle
+						</a>
+					</li>
+					<li>
+						<a href="http://gildor.myds.me/battlecalc.jsp">
+							Calculator
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>
