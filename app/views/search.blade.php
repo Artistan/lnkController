@@ -35,6 +35,13 @@
 				jQuery('<hr/>').appendTo('#split_op');
 			});
 		}
+		function linkSplit(data){
+			// l+k://coordinates?16224,16359&125
+			var matches = /coordinates\?([0-9]*),([0-9]*)\&/i.exec(data);
+			console.log(matches);
+			jQuery('#originX').val(matches[1]);
+			jQuery('#originY').val(matches[2]);
+		}
 		function clear_op(){
 			jQuery('#split_op').empty();
 		}
@@ -120,7 +127,7 @@
 				</li>
 			</ol>
 
-			<form class="collapse" id="collapseForm">
+			<form class="collapse" id="collapseForm" action="?">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						Origin: {{ $origin['name'] or 'INVALID ORIGIN' }}
@@ -154,7 +161,11 @@
 							<div class="form-group">
 								<label for="link">lnk Link</label>
 								<input type="text" class="form-control" id="link" placeholder="lnk://,,,"
-									   value="{{ $origin['mapX'] or '' }}">
+									   onchange="linkSplit(this.value)"
+									   @if( !empty($origin['mapX']) )
+									   value="l+k://coordinates?{{ $origin['mapX'] }},{{ $origin['mapY'] }}&{{ $inputs['server'] }}"
+									   @endif
+								>
 							</div>
 						<div class="form-group">
 							<label for="originX">Origin X</label>
@@ -319,6 +330,15 @@
 						</div>
 						<div class="checkbox">
 							<label>
+								<input type="checkbox" name="fakes"
+									   @if( !empty($inputs['fakes']) )
+									   checked
+										@endif
+								> Fakes Sheet
+							</label>
+						</div>
+						<div class="checkbox">
+							<label>
 								<input type="checkbox" name="distance"
 									   @if( !empty($inputs['distance']) )
 									   checked
@@ -397,7 +417,11 @@ l+k://coordinates?{{ $castle['mapX'] }},{{ $castle['mapY'] }}&{{ $inputs['server
 Distance:{{ $castle['_search_score'] }}
 @endif
 @if( !empty($inputs['ops']) )
+@if( empty($inputs['fakes']) )
 $ 💰:
+@else
++ 💣:
+@endif
 + 💣:
 @endif
 
@@ -442,7 +466,11 @@ $ 💰:
 							Distance:{{ $castle['_search_score'] }}<br/>
 					@endif
 					@if( !empty($inputs['ops']) )
-						$ 💰:<br/>
+							@if( empty($inputs['fakes']) )
+								$ 💰:<br/>
+							@else
+								+ 💣:<br/>
+							@endif
 						+ 💣:<br/>
 					@endif
 					<br/>
