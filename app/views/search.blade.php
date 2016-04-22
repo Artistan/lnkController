@@ -42,6 +42,17 @@
 			jQuery('#originX').val(matches[1]);
 			jQuery('#originY').val(matches[2]);
 		}
+		function linkRegex(ele){
+			//l+k://player?12410&125
+			var eleObj = jQuery(ele),
+					val = eleObj.val();
+			var arr = [];
+			var reg = /([0-9]*)(?:&)/g;
+			while (match = reg.exec(val)) {
+				arr.push(match[1]);
+			}
+			eleObj.val(arr.join());
+		}
 		function clear_op(){
 			jQuery('#split_op').empty();
 		}
@@ -250,7 +261,7 @@
 						</div>--}}
 						<div class="form-group">
 							<label for="alliancesIDs">Alliance IDs (comma seperated)</label>
-							<input type="text" class="form-control" name="habitats[alliancesIDs]" id="alliancesIDs" placeholder="Number[, Number, ...]"
+							<input onblur="linkRegex(this);" type="text" class="form-control" name="habitats[alliancesIDs]" id="alliancesIDs" placeholder="Number[, Number, ...]"
 							    @if( !empty($inputs['habitats']['alliancesIDs']) )
 									@if( is_array($inputs['habitats']['alliancesIDs']) )
 										value="{{ implode(',',$inputs['habitats']['alliancesIDs']) }}"
@@ -271,7 +282,7 @@
 						</div>--}}
 						<div class="form-group">
 							<label for="playerIDs">Player IDs (comma seperated)</label>
-							<input type="text" class="form-control" name="habitats[playerIDs]" id="playerIDs" placeholder="Number[, Number, ...]"
+							<input onblur="linkRegex(this);" type="text" class="form-control" name="habitats[playerIDs]" id="playerIDs" placeholder="Number[, Number, ...]"
 								   @if( !empty($inputs['habitats']['playerIDs']) )
 								   @if( is_array($inputs['habitats']['playerIDs']) )
 								   value="{{ implode(',',$inputs['habitats']['playerIDs']) }}"
