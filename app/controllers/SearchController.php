@@ -81,9 +81,9 @@ class SearchController extends BaseController {
     }
 
     private function get($type){
-        if(empty($processed[$type])){
+        if(empty($this->processed[$type])){
             $this->process($type);// only process once.
-            $processed[$type]=true;
+            $this->processed[$type]=true;
         }
         $this->inputs[$type]['query']  =  $this->query_parts($type);
         $this->inputs[$type]['filter'] = $this->filter($type);
