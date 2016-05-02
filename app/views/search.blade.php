@@ -356,7 +356,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label for="size">Number of Total Results</label>
-										<input type="number" class="form-control" name="closest[size]" id="size" placeholder="Number"
+										<input type="number" class="form-control" name="closest[size]" id="close-size" placeholder="Number"
 											   value="{{ $inputs['closest']['size'] or '1' }}">
 									</div>
 									{{--						<div class="form-group">
@@ -369,7 +369,7 @@
                                                             </div>--}}
 									<div class="form-group">
 										<label for="alliancesIDs">Alliance IDs (comma seperated)</label>
-										<input onblur="linkRegex(this);" type="text" class="form-control" name="closest[alliancesIDs]" id="alliancesIDs" placeholder="Number[, Number, ...]"
+										<input onblur="linkRegex(this);" type="text" class="form-control" name="closest[alliancesIDs]" id="close-alliancesIDs" placeholder="Number[, Number, ...]"
 											   @if( !empty($inputs['closest']['alliancesIDs']) )
 											   @if( is_array($inputs['closest']['alliancesIDs']) )
 											   value="{{ implode(',',$inputs['closest']['alliancesIDs']) }}"
@@ -389,7 +389,7 @@
                                                             </div>--}}
 									<div class="form-group">
 										<label for="playerIDs">Player IDs (comma seperated)</label>
-										<input onblur="linkRegex(this);" type="text" class="form-control" name="closest[playerIDs]" id="playerIDs" placeholder="Number[, Number, ...]"
+										<input onblur="linkRegex(this);" type="text" class="form-control" name="closest[playerIDs]" id="close-playerIDs" placeholder="Number[, Number, ...]"
 											   @if( !empty($inputs['closest']['playerIDs']) )
 											   @if( is_array($inputs['closest']['playerIDs']) )
 											   value="{{ implode(',',$inputs['closest']['playerIDs']) }}"
@@ -403,7 +403,7 @@
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label for="points">Castle Exact Size (comma seperated)</label>
-										<input type="text" class="form-control" name="closest[points]" id="points" placeholder="Number[, Number, ...]"
+										<input type="text" class="form-control" name="closest[points]" id="close-points" placeholder="Number[, Number, ...]"
 											   @if( !empty($inputs['closest']['points']) )
 											   @if( is_array($inputs['closest']['points']) )
 											   value="{{ implode(',',$inputs['closest']['points']) }}"
@@ -415,7 +415,7 @@
 									</div>
 									<div class="form-group">
 										<label for="min">Castle Minimum Size</label>
-										<select class="form-control" id="min" name="closest[min]">
+										<select class="form-control" id="close-min" name="closest[min]">
 											@if( !empty($inputs['closest']['min']) && $inputs['closest']['min'] > 0 )
 												<option>{{$inputs['closest']['min']}}</option>
 											@endif
@@ -432,7 +432,7 @@
 									</div>
 									<div class="form-group">
 										<label for="max">Castle Maximum Size</label>
-										<select class="form-control" id="max" name="closest[max]">
+										<select class="form-control" id="close-max" name="closest[max]">
 											@if( !empty($inputs['closest']['max']) && $inputs['closest']['max'] > 0 )
 												<option>{{$inputs['closest']['max']}}</option>
 											@endif
@@ -452,7 +452,7 @@
 							<span class="label label-warning">Check If In Alliance</span>
 							<div class="radio">
 								<label>
-									<input type="radio" name="closest[in_alliance]" id="in_allianceY" value="no"
+									<input type="radio" name="closest[in_alliance]" id="close-in_allianceY" value="no"
 										   @if( !empty($inputs['closest']['in_alliance']) && $inputs['closest']['in_alliance'] == 'no' )
 										   checked
 											@endif
@@ -462,7 +462,7 @@
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" name="closest[in_alliance]" id="in_allianceN" value="yes"
+									<input type="radio" name="closest[in_alliance]" id="close-in_allianceN" value="yes"
 										   @if( !empty($inputs['closest']['in_alliance']) && $inputs['closest']['in_alliance'] == 'yes' )
 										   checked
 											@endif
@@ -472,7 +472,7 @@
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" name="closest[in_alliance]" id="in_allianceE" value="either"
+									<input type="radio" name="closest[in_alliance]" id="close-in_allianceE" value="either"
 										   @if( empty($inputs['closest']['in_alliance']) || $inputs['closest']['in_alliance'] == 'either' )
 										   checked
 											@endif
