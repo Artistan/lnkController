@@ -6,14 +6,20 @@ class SearchController extends BaseController {
     private $opSheet=true;
     private $fakesSheet=true;
     private $playerInfo=true;
+    private $getClose=true;
     private $allianceInfo=true;
     private $inputs = array();
     private $alliances = array();
     private $players = array();
     private $habitats = array();
+    private $closest = array();
     private $origin = array();
     private $defaultOriginX = 0;
     private $defaultOriginY = 0;
+    // override the elasticsearch type for a type name...
+    private $typeOverride = array(
+        'closest'=>'habitats'
+    );
 
     public function search()
     {
@@ -31,7 +37,7 @@ class SearchController extends BaseController {
             $this->alliances();
         }
         //echo "<pre>";var_dump($this->alliances);exit;
-        if($this->playerInfo){
+        if($this->playerInfo || $this->getClose){
             $this->players();
         }
         //echo "<pre>";var_dump($this->players);exit;
@@ -54,6 +60,18 @@ class SearchController extends BaseController {
 
     private function habitats(){
         $this->get('habitats');
+        //var_dump($this->habitats);
+        foreach($this->habitats as $hId=>$data){
+            $this->inputs['closest']['alliances'] = array(9214);
+            $this->inputs['closest']['players'] = array();
+            $this->inputs['closest']['alliancesIDs'] = array();
+            $this->inputs['closest']['originY'] = $data['mapY'];
+            $this->inputs['closest']['originX'] = $data['mapX'];
+            $this->get('closest');
+            //echo ($this->inputs['closest']['query_string']);
+            //var_dump($this->closest);
+            $this->habitats[$hId]['closest'] = $this->closest;
+        }
     }
 
     private function alliances(){
@@ -100,6 +118,9 @@ class SearchController extends BaseController {
         if(empty($this->inputs['playerInfo'])){
             $this->playerInfo=false;
         }
+        if(empty($this->inputs['getClose'])){
+            $this->getClose=false;
+        }
         if(empty($this->inputs['allianceInfo'])){
             $this->allianceInfo=false;
         }
@@ -108,6 +129,7 @@ class SearchController extends BaseController {
         $this->inputs['distance']   = $this->showDistance;
         $this->inputs['allianceInfo']   = $this->allianceInfo;
         $this->inputs['playerInfo']   = $this->playerInfo;
+        $this->inputs['getClose']   = $this->getClose;
         if(empty($this->inputs['server']) || $this->inputs['server']==125 || $this->inputs['server']=='US9'){
             $this->inputs['server']=125;
             $this->inputs['index']='lnk9_today';
@@ -180,7 +202,7 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
                 $this->inputs[$type]['terms']['points']=explode(',',$this->inputs[$type]['points']);
             }
         }
-        if($type=='habitats'){
+        if($type=='habitats' || $type=='closest'){
 
             if(empty($this->inputs[$type]['players'])){
                 $this->inputs[$type]['players']=array();
@@ -225,10 +247,12 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
                     $this->inputs[$type]['exists'][]='allianceID';
                 }
             }
-            if(!empty($this->inputs['originX'])){
+            // if default set and type not set, then use the default.
+            if(!empty($this->inputs['originX']) && empty($this->inputs[$type]['originX'])){
                 $this->inputs[$type]['originX'] = $this->inputs['originX'];
             }
-            if(!empty($this->inputs['originY'])){
+            // if default set and type not set, then use the default.
+            if(!empty($this->inputs['originY']) && empty($this->inputs[$type]['originY'])){
                 $this->inputs[$type]['originY'] = $this->inputs['originY'];
             }
         } else {
@@ -425,8 +449,14 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
             ';
         }
 
+        if(!empty($this->typeOverride[$type])){
+            $elasticType = $this->typeOverride[$type];
+        } else {
+            $elasticType = $type;
+        }
+
         $this->inputs[$type]['query_string'] = '
-curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$this->inputs['index'].'/'.$type.'/_search?pretty\' -d \'
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$this->inputs['index'].'/'.$elasticType.'/_search?pretty\' -d \'
 {
     "from" : 0, "size" : '.$this->inputs[$type]['size'].',
     '.$query.'
