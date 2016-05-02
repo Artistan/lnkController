@@ -13,6 +13,7 @@ class SearchController extends BaseController {
     private $players = array();
     private $habitats = array();
     private $closest = array();
+    private $processed = array();
     private $origin = array();
     private $defaultOriginX = 0;
     private $defaultOriginY = 0;
@@ -62,9 +63,6 @@ class SearchController extends BaseController {
         $this->get('habitats');
         //var_dump($this->habitats);
         foreach($this->habitats as $hId=>$data){
-            $this->inputs['closest']['alliances'] = array(9214);
-            $this->inputs['closest']['players'] = array();
-            $this->inputs['closest']['alliancesIDs'] = array();
             $this->inputs['closest']['originY'] = $data['mapY'];
             $this->inputs['closest']['originX'] = $data['mapX'];
             $this->get('closest');
@@ -83,7 +81,10 @@ class SearchController extends BaseController {
     }
 
     private function get($type){
-        $this->process($type);
+        if(empty($processed[$type])){
+            $this->process($type);// only process once.
+            $processed[$type]=true;
+        }
         $this->inputs[$type]['query']  =  $this->query_parts($type);
         $this->inputs[$type]['filter'] = $this->filter($type);
 
