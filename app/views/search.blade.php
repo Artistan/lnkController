@@ -47,7 +47,7 @@
 			var eleObj = jQuery(ele),
 					val = eleObj.val();
 			var arr = [];
-			var reg = /([0-9]*)(?:&)/g;
+			var reg = /([0-9]+)(&[0-9]*)?(,)?/g;
 			while (match = reg.exec(val)) {
 				arr.push(match[1]);
 			}
