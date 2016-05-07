@@ -62,13 +62,15 @@ class SearchController extends BaseController {
     private function habitats(){
         $this->get('habitats');
         //var_dump($this->habitats);
-        foreach($this->habitats as $hId=>$data){
-            $this->inputs['closest']['originY'] = $data['mapY'];
-            $this->inputs['closest']['originX'] = $data['mapX'];
-            $this->get('closest');
-            //echo ($this->inputs['closest']['query_string']);
-            //var_dump($this->closest);
-            $this->habitats[$hId]['closest'] = $this->closest;
+        if($this->getClose){
+            foreach($this->habitats as $hId=>$data){
+                $this->inputs['closest']['originY'] = $data['mapY'];
+                $this->inputs['closest']['originX'] = $data['mapX'];
+                $this->get('closest');
+                //echo ($this->inputs['closest']['query_string']);
+                //var_dump($this->closest);
+                $this->habitats[$hId]['closest'] = $this->closest;
+            }
         }
     }
 
