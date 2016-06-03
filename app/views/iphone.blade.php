@@ -11,7 +11,23 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-3dkvEK0WLHRJ7/Csr0BZjAWxERc5WH7bdeUya2aXxdU= sha512-+L4yy6FRcDGbXJ9mPG8MT/3UCDzwR9gPeyFNMCtInsol++5m3bk2bXWKdZjvybmohrAsn3Ua5x8gfLnbE1YkOg==" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/yeti/bootstrap.min.css" rel="stylesheet" integrity="sha256-daEYF2SGTkiPl4cmxH06AOMnZ+Hb8wBpvs7DqvceszY= sha512-xmSDqcgDrroCG8Sp/p0IArjjB3lO0m0Yde0tm1mOFD4BwmsvZnVNfHgw7icU6q4ScrTCQKCokxnYMy/hUUfGrg==" crossorigin="anonymous">
 
-    <script src="js/jsqrcode-combined.min.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/bitmat.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/grid.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/qrcode.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/findpat.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/detector.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/gf256poly.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/gf256.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/rsdecoder.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/decoder.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/version.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/formatinf.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/errorlevel.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/datablock.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/bmparser.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/datamask.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/alignpat.js"></script>
+    <script type="text/javascript" src="js/jsqrcode/src/databr.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -106,7 +122,6 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-default">Submit</button>
         </form>
 
     </div>
