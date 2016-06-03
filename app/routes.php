@@ -15,4 +15,8 @@ Route::get('/', function()
 {
 	return View::make('hello');
 });
+Route::get('/iphone', function()
+{
+	return View::make('iphone');
+});
 Route::get('search', 'SearchController@search');
