@@ -4,15 +4,23 @@ class SearchController extends BaseController {
 
     private $showDistance=true;
     private $opSheet=true;
+    private $fakesSheet=true;
     private $playerInfo=true;
+    private $getClose=true;
     private $allianceInfo=true;
     private $inputs = array();
     private $alliances = array();
     private $players = array();
     private $habitats = array();
+    private $closest = array();
+    private $processed = array();
     private $origin = array();
     private $defaultOriginX = 0;
     private $defaultOriginY = 0;
+    // override the elasticsearch type for a type name...
+    private $typeOverride = array(
+        'closest'=>'habitats'
+    );
 
     public function search()
     {
@@ -30,7 +38,7 @@ class SearchController extends BaseController {
             $this->alliances();
         }
         //echo "<pre>";var_dump($this->alliances);exit;
-        if($this->playerInfo){
+        if($this->playerInfo || $this->getClose){
             $this->players();
         }
         //echo "<pre>";var_dump($this->players);exit;
@@ -53,6 +61,17 @@ class SearchController extends BaseController {
 
     private function habitats(){
         $this->get('habitats');
+        //var_dump($this->habitats);
+        if($this->getClose){
+            foreach($this->habitats as $hId=>$data){
+                $this->inputs['closest']['originY'] = $data['mapY'];
+                $this->inputs['closest']['originX'] = $data['mapX'];
+                $this->get('closest');
+                //echo ($this->inputs['closest']['query_string']);
+                //var_dump($this->closest);
+                $this->habitats[$hId]['closest'] = $this->closest;
+            }
+        }
     }
 
     private function alliances(){
@@ -64,7 +83,10 @@ class SearchController extends BaseController {
     }
 
     private function get($type){
-        $this->process($type);
+        if(empty($this->processed[$type])){
+            $this->process($type);// only process once.
+            $this->processed[$type]=true;
+        }
         $this->inputs[$type]['query']  =  $this->query_parts($type);
         $this->inputs[$type]['filter'] = $this->filter($type);
 
@@ -90,19 +112,27 @@ class SearchController extends BaseController {
         if(empty($this->inputs['ops'])){
             $this->opSheet=false;
         }
+        if(empty($this->inputs['fakes'])){
+            $this->fakesSheet=false;
+        }
         if(empty($this->inputs['distance'])){
             $this->showDistance=false;
         }
         if(empty($this->inputs['playerInfo'])){
             $this->playerInfo=false;
         }
+        if(empty($this->inputs['getClose'])){
+            $this->getClose=false;
+        }
         if(empty($this->inputs['allianceInfo'])){
             $this->allianceInfo=false;
         }
         $this->inputs['ops']        = $this->opSheet;
+        $this->inputs['fakes']        = $this->fakesSheet;
         $this->inputs['distance']   = $this->showDistance;
         $this->inputs['allianceInfo']   = $this->allianceInfo;
         $this->inputs['playerInfo']   = $this->playerInfo;
+        $this->inputs['getClose']   = $this->getClose;
         if(empty($this->inputs['server']) || $this->inputs['server']==125 || $this->inputs['server']=='US9'){
             $this->inputs['server']=125;
             $this->inputs['index']='lnk9_today';
@@ -159,52 +189,55 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
     }
     private function process($type){
         if(!empty($this->inputs[$type]['min'])){
-            $this->inputs[$type]['min']=200;
-            $this->inputs[$type]['max']=2000;// default the max...
+            $this->inputs[$type]['min']=$this->inputs[$type]['min'];
+        } else if(!empty($this->inputs[$type]['max'])){
+            $this->inputs[$type]['min']=0;
         }
         if(!empty($this->inputs[$type]['max'])){
+            $this->inputs[$type]['max']=$this->inputs[$type]['max'];
+        } else if(!empty($this->inputs[$type]['min'])){
             $this->inputs[$type]['max']=2000;
         }
         if(!empty($this->inputs[$type]['points'])){
             if(is_array($this->inputs[$type]['points'])){
-                $this->inputs[$type]['must']['points']=$this->inputs[$type]['points'];
+                $this->inputs[$type]['terms']['points']=$this->inputs[$type]['points'];
             } else {
-                $this->inputs[$type]['must']['points']=explode(',',$this->inputs[$type]['points']);
+                $this->inputs[$type]['terms']['points']=explode(',',$this->inputs[$type]['points']);
             }
         }
-        if($type=='habitats'){
+        if($type=='habitats' || $type=='closest'){
 
             if(empty($this->inputs[$type]['players'])){
                 $this->inputs[$type]['players']=array();
             }
             if(!empty($this->inputs[$type]['playerIDs'])){
                 if(is_array($this->inputs[$type]['playerIDs'])){
-                    $this->inputs[$type]['must']['playerID']=array_merge($this->inputs[$type]['playerIDs'],$this->inputs[$type]['players']);
+                    $this->inputs[$type]['terms']['playerID']=array_merge($this->inputs[$type]['playerIDs'],$this->inputs[$type]['players']);
                 } else {
-                    $this->inputs[$type]['must']['playerID']=array_merge(explode(',',$this->inputs[$type]['playerIDs']), $this->inputs[$type]['players']);
+                    $this->inputs[$type]['terms']['playerID']=array_merge(explode(',',$this->inputs[$type]['playerIDs']), $this->inputs[$type]['players']);
                 }
             } else if (!empty($this->inputs[$type]['players'])){
-                $this->inputs[$type]['must']['playerID'] = $this->inputs[$type]['players'];
+                $this->inputs[$type]['terms']['playerID'] = $this->inputs[$type]['players'];
             }
-            if(!empty($this->inputs[$type]['must']['playerID'])){
-                $this->inputs[$type]['playerIDs'] = implode(',',$this->inputs[$type]['must']['playerID']);
-                $this->inputs[$type]['players'] = $this->inputs[$type]['must']['playerID'];
+            if(!empty($this->inputs[$type]['terms']['playerID'])){
+                $this->inputs[$type]['playerIDs'] = implode(',',$this->inputs[$type]['terms']['playerID']);
+                $this->inputs[$type]['players'] = $this->inputs[$type]['terms']['playerID'];
             }
             if(empty($this->inputs[$type]['alliances'])){
                 $this->inputs[$type]['alliances']=array();
             }
             if(!empty($this->inputs[$type]['alliancesIDs'])){
                 if(is_array($this->inputs[$type]['alliancesIDs'])){
-                    $this->inputs[$type]['must']['allianceID']=array_merge($this->inputs[$type]['alliancesIDs'],$this->inputs[$type]['alliances']);
+                    $this->inputs[$type]['terms']['allianceID']=array_merge($this->inputs[$type]['alliancesIDs'],$this->inputs[$type]['alliances']);
                 } else {
-                    $this->inputs[$type]['must']['allianceID']=array_merge(explode(',',$this->inputs[$type]['alliancesIDs']), $this->inputs[$type]['alliances']);
+                    $this->inputs[$type]['terms']['allianceID']=array_merge(explode(',',$this->inputs[$type]['alliancesIDs']), $this->inputs[$type]['alliances']);
                 }
             } else if (!empty($this->inputs[$type]['alliances'])){
-                $this->inputs[$type]['must']['allianceID'] = $this->inputs[$type]['alliances'];
+                $this->inputs[$type]['terms']['allianceID'] = $this->inputs[$type]['alliances'];
             }
-            if(!empty($this->inputs[$type]['must']['allianceID'])){
-                $this->inputs[$type]['alliancesIDs'] = implode(',',$this->inputs[$type]['must']['allianceID']);
-                $this->inputs[$type]['alliances'] = $this->inputs[$type]['must']['allianceID'];
+            if(!empty($this->inputs[$type]['terms']['allianceID'])){
+                $this->inputs[$type]['alliancesIDs'] = implode(',',$this->inputs[$type]['terms']['allianceID']);
+                $this->inputs[$type]['alliances'] = $this->inputs[$type]['terms']['allianceID'];
             }
             if(empty($this->inputs[$type]['size'])){
                 $this->inputs[$type]['size']=100;
@@ -217,10 +250,12 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
                     $this->inputs[$type]['exists'][]='allianceID';
                 }
             }
-            if(!empty($this->inputs['originX'])){
+            // if default set and type not set, then use the default.
+            if(!empty($this->inputs['originX']) && empty($this->inputs[$type]['originX'])){
                 $this->inputs[$type]['originX'] = $this->inputs['originX'];
             }
-            if(!empty($this->inputs['originY'])){
+            // if default set and type not set, then use the default.
+            if(!empty($this->inputs['originY']) && empty($this->inputs[$type]['originY'])){
                 $this->inputs[$type]['originY'] = $this->inputs['originY'];
             }
         } else {
@@ -234,18 +269,6 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
     private function query_parts($type="habitats"){
         $checks = array();
         $query='';
-        if(isset($this->inputs[$type]['min']) && !empty($this->inputs[$type]['max'])){
-            $checks['bool']['must'][] = '
-                        {
-                            "range": {
-                                "points": {
-                                    "gte" : '.$this->inputs[$type]['min'].',
-                                    "lte" : '.$this->inputs[$type]['max'].'
-                                }
-                            }
-                        }
-                    ';
-        }
         if(!empty($this->inputs[$type]['should'])){
             if(is_array($this->inputs[$type]['should'])){
                 foreach($this->inputs[$type]['should'] as $tag=>$values){
@@ -328,8 +351,34 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
     }
 
     private function filter($type="habitats"){
-        $query='';
+        $query='"filter": {';
         $checks=array();
+        if(isset($this->inputs[$type]['min']) && !empty($this->inputs[$type]['max'])){
+            $checks['bool']['must'][] = '{
+                        "range": {
+                            "points": {
+                                "gte" : '.$this->inputs[$type]['min'].',
+                                "lte" : '.$this->inputs[$type]['max'].'
+                            }
+                        }
+                    }';
+        }
+        if(!empty($this->inputs[$type]['terms'])){
+            if(is_array($this->inputs[$type]['terms'])){
+                foreach($this->inputs[$type]['terms'] as $tag=>$values){
+                    if(is_numeric(current($values))){
+                        $qt='';
+                    } else {
+                        $qt='"';
+                    }
+                    $checks['bool']['must'][] = '
+                          {"terms": {
+                            "'.$tag.'": ['.$qt.implode($qt.','.$qt,$values).$qt.']
+                          }}
+                    ';
+                }
+            }
+        }
         if(!empty($this->inputs[$type]['missing'])){
             if(is_array($this->inputs[$type]['missing'])){
                 foreach($this->inputs[$type]['missing'] as $tag){
@@ -361,14 +410,13 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
         }
         if(!empty($boolParts)){
             $query .= '
-            "filter": {
                 "bool": {
                     '.implode(',',$boolParts).'
                 }
-            },
             ';
         }
-        return $query;
+        return trim($query,'\t\n\r,').'
+            },';
     }
 
     private function query($type){
@@ -404,8 +452,14 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
             ';
         }
 
+        if(!empty($this->typeOverride[$type])){
+            $elasticType = $this->typeOverride[$type];
+        } else {
+            $elasticType = $type;
+        }
+
         $this->inputs[$type]['query_string'] = '
-curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$this->inputs['index'].'/'.$type.'/_search?pretty\' -d \'
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$this->inputs['index'].'/'.$elasticType.'/_search?pretty\' -d \'
 {
     "from" : 0, "size" : '.$this->inputs[$type]['size'].',
     '.$query.'
