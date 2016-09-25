@@ -472,7 +472,7 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
     ]
 }\'
 ';
-        echo $this->inputs[$type]['query_string'];
+        //echo $this->inputs[$type]['query_string'];
         return $this->inputs[$type]['query_string'];
     }
 }
