@@ -114,6 +114,11 @@
 						</a>
 					</li>
 					<li>
+						<a href="http://www.lordsandknightstools.com/en/125-USA_9/histo_joueur.php">
+							History
+						</a>
+					</li>
+					<li>
 						<a href="http://lordsandknights.enjoyed.today/SelfTrickle/">
 							Trickle
 						</a>
