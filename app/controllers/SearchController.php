@@ -438,7 +438,7 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
                             "originX" : '.$this->inputs[$type]['originX'].',
                             "originY" : '.$this->inputs[$type]['originY'].'
                         },
-                        "script" : "(abs(doc[\"mapX\"].value - originX) + abs(doc[\"mapX\"].value + doc[\"mapY\"].value - originX - originY) + abs(doc[\"mapY\"].value - originY)) / 2"
+                        "script" : "(abs(originY - doc[\"mapY\"].value) * 0.5 >= abs( ((originY & 1) ? originX + 0.5 : originX) - ((doc[\"mapY\"].value & 1) ? doc[\"mapX\"].value + 0.5 : doc[\"mapX\"].value))) ? abs(originY - doc[\"mapY\"].value) : (abs(originY - doc[\"mapY\"].value) * 0.5 + abs( ((originY & 1) ? originX + 0.5 : originX) - ((doc[\"mapY\"].value & 1) ? doc[\"mapX\"].value + 0.5 : doc[\"mapX\"].value)))"
                     }
                 }
             },
