@@ -136,12 +136,19 @@ class SearchController extends BaseController {
         if(empty($this->inputs['server']) || $this->inputs['server']==125 || $this->inputs['server']=='US9'){
             $this->inputs['server']=125;
             $this->inputs['index']='lnk9_today';
+        } else if( $this->inputs['server']==168 || $this->inputs['server']=='US12'){
+	        $this->inputs['server']=168;
+	        $this->inputs['index']='lnk12_today';
         } else {
             $this->inputs['server']=113;
             $this->inputs['index']='lnk_today';
         }
         // default origin coordinates.
-        if($this->inputs['server']==125){
+	    if($this->inputs['server']==168){
+		    // my fort on 12
+		    $this->defaultOriginX=16430;
+		    $this->defaultOriginY=16382;
+	    } else if($this->inputs['server']==125){
             // my fort on 9
             $this->defaultOriginX=16413;
             $this->defaultOriginY=16252;

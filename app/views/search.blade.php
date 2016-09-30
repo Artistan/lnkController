@@ -155,6 +155,10 @@
 									<label for="max">Server</label>
 									<select class="form-control" id="server" name="server" onchange="jQuery('#originX').val('');jQuery('#originY').val('')">
 										<option
+												@if( !empty($inputs['server']) && $inputs['server'] == 168 )
+												selected
+												@endif>US12</option>
+										<option
 												@if( !empty($inputs['server']) && $inputs['server'] == 125 )
 												selected
 												@endif>US9</option>
