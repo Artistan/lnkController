@@ -203,7 +203,7 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
         if(!empty($this->inputs[$type]['max'])){
             $this->inputs[$type]['max']=$this->inputs[$type]['max'];
         } else if(!empty($this->inputs[$type]['min'])){
-            $this->inputs[$type]['max']=2000;
+            $this->inputs[$type]['max']=20000;
         }
         if(!empty($this->inputs[$type]['points'])){
             if(is_array($this->inputs[$type]['points'])){

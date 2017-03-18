@@ -290,6 +290,11 @@
 										<option>1600</option>
 										<option>1700</option>
 										<option>1797</option>
+										<option>10000</option>
+										<option>10100</option>
+										<option>10200</option>
+										<option>10300</option>
+										<option>20000</option>
 									</select>
 								</div>
 								<div class="form-group">
@@ -307,6 +312,11 @@
 										<option>1600</option>
 										<option>1700</option>
 										<option>1797</option>
+										<option>10000</option>
+										<option>10100</option>
+										<option>10200</option>
+										<option>10300</option>
+										<option>20000</option>
 									</select>
 								</div>
 							</div>
@@ -437,6 +447,11 @@
 											<option>1600</option>
 											<option>1700</option>
 											<option>1797</option>
+											<option>10000</option>
+											<option>10100</option>
+											<option>10200</option>
+											<option>10300</option>
+											<option>20000</option>
 										</select>
 									</div>
 									<div class="form-group">
@@ -454,6 +469,11 @@
 											<option>1600</option>
 											<option>1700</option>
 											<option>1797</option>
+											<option>10000</option>
+											<option>10100</option>
+											<option>10200</option>
+											<option>10300</option>
+											<option>20000</option>
 										</select>
 									</div>
 								</div>
