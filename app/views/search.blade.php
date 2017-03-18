@@ -123,11 +123,11 @@
 							Trickle
 						</a>
 					</li>
-					<li>
+					{{--<li>
 						<a href="http://gildor.myds.me/battlecalc.jsp">
 							Calculator
 						</a>
-					</li>
+					</li>--}}
 				</ul>
 			</div>
 		</div>
