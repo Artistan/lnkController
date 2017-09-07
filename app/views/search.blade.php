@@ -123,11 +123,11 @@
 							Trickle
 						</a>
 					</li>
-					<li>
+					{{--<li>
 						<a href="http://gildor.myds.me/battlecalc.jsp">
 							Calculator
 						</a>
-					</li>
+					</li>--}}
 				</ul>
 			</div>
 		</div>
@@ -154,6 +154,10 @@
 								<div class="form-group">
 									<label for="max">Server</label>
 									<select class="form-control" id="server" name="server" onchange="jQuery('#originX').val('');jQuery('#originY').val('')">
+										<option
+												@if( !empty($inputs['server']) && $inputs['server'] == 168 )
+												selected
+												@endif>US12</option>
 										<option
 												@if( !empty($inputs['server']) && $inputs['server'] == 125 )
 												selected
@@ -286,6 +290,11 @@
 										<option>1600</option>
 										<option>1700</option>
 										<option>1797</option>
+										<option>10000</option>
+										<option>10100</option>
+										<option>10200</option>
+										<option>10300</option>
+										<option>20000</option>
 									</select>
 								</div>
 								<div class="form-group">
@@ -303,6 +312,11 @@
 										<option>1600</option>
 										<option>1700</option>
 										<option>1797</option>
+										<option>10000</option>
+										<option>10100</option>
+										<option>10200</option>
+										<option>10300</option>
+										<option>20000</option>
 									</select>
 								</div>
 							</div>
@@ -433,6 +447,11 @@
 											<option>1600</option>
 											<option>1700</option>
 											<option>1797</option>
+											<option>10000</option>
+											<option>10100</option>
+											<option>10200</option>
+											<option>10300</option>
+											<option>20000</option>
 										</select>
 									</div>
 									<div class="form-group">
@@ -450,6 +469,11 @@
 											<option>1600</option>
 											<option>1700</option>
 											<option>1797</option>
+											<option>10000</option>
+											<option>10100</option>
+											<option>10200</option>
+											<option>10300</option>
+											<option>20000</option>
 										</select>
 									</div>
 								</div>

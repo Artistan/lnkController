@@ -9,6 +9,7 @@
 return [
     'indices' => [
         'lnk'=>['archive'=>false],
-        'lnk9'=>['archive'=>false]
+        'lnk9'=>['archive'=>false],
+        'lnk12'=>['archive'=>false]
     ]
 ];
