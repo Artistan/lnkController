@@ -48,5 +48,25 @@ return [
             $helper = $app->make('datehelper');
             return $helper->range($start,$date,'-30day');
         },
+
+        'lnk12_today' => function($app,$start,$date) {
+	        $helper = $app->make('datehelper');
+	        return $helper->today($start,$date);
+        },
+
+        'lnk12_7day' => function($app,$start,$date) {
+	        $helper = $app->make('datehelper');
+	        return $helper->range($start,$date,'-7day');
+        },
+
+        'lnk12_14day' => function($app,$start,$date) {
+	        $helper = $app->make('datehelper');
+	        return $helper->range($start,$date,'-14day');
+        },
+
+        'lnk12_30day' => function($app,$start,$date) {
+	        $helper = $app->make('datehelper');
+	        return $helper->range($start,$date,'-30day');
+        },
     ],
 ];

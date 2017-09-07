@@ -136,12 +136,19 @@ class SearchController extends BaseController {
         if(empty($this->inputs['server']) || $this->inputs['server']==125 || $this->inputs['server']=='US9'){
             $this->inputs['server']=125;
             $this->inputs['index']='lnk9_today';
+        } else if( $this->inputs['server']==168 || $this->inputs['server']=='US12'){
+	        $this->inputs['server']=168;
+	        $this->inputs['index']='lnk12_today';
         } else {
             $this->inputs['server']=113;
             $this->inputs['index']='lnk_today';
         }
         // default origin coordinates.
-        if($this->inputs['server']==125){
+	    if($this->inputs['server']==168){
+		    // my fort on 12
+		    $this->defaultOriginX=16430;
+		    $this->defaultOriginY=16382;
+	    } else if($this->inputs['server']==125){
             // my fort on 9
             $this->defaultOriginX=16413;
             $this->defaultOriginY=16252;
@@ -196,7 +203,7 @@ curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" \'localhost:9200/'.$th
         if(!empty($this->inputs[$type]['max'])){
             $this->inputs[$type]['max']=$this->inputs[$type]['max'];
         } else if(!empty($this->inputs[$type]['min'])){
-            $this->inputs[$type]['max']=2000;
+            $this->inputs[$type]['max']=20000;
         }
         if(!empty($this->inputs[$type]['points'])){
             if(is_array($this->inputs[$type]['points'])){
