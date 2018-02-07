@@ -1,0 +1,3 @@
+[submodule "app/config/packages/backup"]
+	path = app/config/packages/backup
+	url = https://github.com/Artistan/lnk-elastic-cfg.git
