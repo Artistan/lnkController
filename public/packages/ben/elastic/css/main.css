@@ -1,0 +1,29 @@
+.panel {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.hljs {
+    background-color:transparent;
+}
+
+footer .container p{
+    margin:20px 0;
+    color: #777;
+}
+
+body {
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+.hideOverflow
+{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+table.table tr td div.hideOverflow
+{
+    max-width:250px;
+}

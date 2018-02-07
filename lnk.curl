@@ -1,0 +1,232 @@
+
+-------------------
+curl 'localhost:9200/_cat/indices?v'
+#curl -XDELETE 'http://localhost:9200/_all'
+
+cd /var/www/vhosts/elastictools/
+php artisan elastic:writer lnk
+php artisan elastic:writer lnk9
+php artisan elastic:run
+
+
+------ alliance habitats sort by hex distance
+
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk_2015-10-15/habitats/_search?pretty' -d '
+{
+    "query" : {
+		"function_score":{
+			"query":  { "match": { "allianceID": 10494 } },
+			"boost_mode": "replace",
+			"script_score" : {
+			    "params" : {
+			        "originX" : 16198,
+			        "originY" : 16527
+			    },
+			    "script" : "(abs(doc[\"mapX\"].value - originX) + abs(doc[\"mapX\"].value + doc[\"mapY\"].value - originX - originY) + abs(doc[\"mapY\"].value - originY)) / 2"
+			}
+		}
+    },
+    "sort" : [
+        {
+            "_score" : {
+				"order": "asc"
+            }
+        }
+    ]
+}'
+
+------ player 9 habitats sort by hex distance ---
+
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk9_2015-10-15/habitats/_search?pretty' -d '
+{
+    "query" : {
+		"function_score":{
+			"query":  { "match": { "playerID": "1474" } },
+			"boost_mode": "replace",
+			"script_score" : {
+			    "params" : {
+			        "originX" : 16413,
+			        "originY" : 16252
+			    },
+			    "script" : "(abs(doc[\"mapX\"].value - originX) + abs(doc[\"mapX\"].value + doc[\"mapY\"].value - originX - originY) + abs(doc[\"mapY\"].value - originY)) / 2"
+			}
+		}
+    },
+    "sort" : [
+        {
+            "_score" : {
+				"order": "asc"
+            }
+        }
+    ]
+}'
+
+----- ME
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk_2015-10-15/players/_search?pretty' -d '
+{
+  	"query": {
+	  	"match": {
+	  		"nick": "Artistan"
+	  	}
+  	}
+}'
+
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk_2015-10-15/habitats/53994?pretty'
+
+----- Alliance search.
+
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk_2015-10-15/alliances/_search?pretty' -d '
+{
+  	"query": {
+	  	"match": {
+	  		"name": "⚔Legends⚔"
+	  	}
+  	}
+}'
+
+------ alliance players
+
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk_2015-10-15/players/_search?pretty' -d '
+{
+  	"query": {
+        "filtered" : {
+            "query" : {
+                "match_all" : {}
+            },
+            "filter" : {
+                "term" : {
+	  				"allianceID": 10494
+                }
+            }
+        }
+  	}
+}'
+
+
+----- points range players
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk_2015-10-15/players/_search?pretty' -d '
+{
+  	"query": {
+	  	"range": {
+	  		"points": {
+	  			"gte" : 100,
+	  			"lte" : 1000
+	  		}
+	  	}
+  	},
+	"filter": {
+        "bool" : {
+            "must" : [
+                { "missing" : { "field" : "allianceID" } },
+                { "term" : { "underAttackProtection" : false } },
+                { "term" : { "onVacation" : false } }
+            ]
+         }
+	},
+  	"sort": {
+  		"rank": {
+  			"order": "asc"
+  		}
+  	}
+}'
+
+------ alliance habitats sort by distance
+
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk_2015-10-15/habitats/_search?pretty' -d '
+{
+    "query" : {
+		"function_score":{
+			"query":  { "match": { "allianceID": 10494 } },
+			"boost_mode": "replace",
+			"script_score" : {
+			    "params" : {
+			        "originX" : 16198,
+			        "originY" : 16527
+			    },
+			    "script" : "(abs(doc[\"mapX\"].value - originX) + abs(doc[\"mapX\"].value + doc[\"mapY\"].value - originX - originY) + abs(doc[\"mapY\"].value - originY)) / 2"
+			}
+		}
+    },
+    "sort" : [
+        {
+            "_score" : {
+				"order": "asc"
+            }
+        }
+    ]
+}'
+
+
+
+
+----- player data. ID
+
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk_2015-10-15/habitats/_search?pretty' -d '
+{
+    "query" : {
+		"function_score":{
+			"query":  { "match": { "playerID": "59185" } },
+			"boost_mode": "replace",
+			"script_score" : {
+			    "params" : {
+			        "originX" : 16198,
+			        "originY" : 16527
+			    },
+			    "script" : "(abs(doc[\"mapX\"].value - originX) + abs(doc[\"mapX\"].value + doc[\"mapY\"].value - originX - originY) + abs(doc[\"mapY\"].value - originY)) / 2"
+			}
+		}
+    },
+    "sort" : [
+        {
+            "_score" : {
+				"order": "asc"
+            }
+        }
+    ]
+}'
+
+
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk_2015-10-15/players/56428?pretty'
+
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk_2015-10-15/habitats/65121?pretty'
+
+------- close to coordinates, min 200points, no alliance.
+--- need geo points.
+
+
+
+curl  -H "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7" 'localhost:9200/lnk_2015-10-15/habitats/_search?pretty' -d '
+{
+    "query" : {
+		"function_score":{
+		   "filter": {
+			    "bool" : {
+			        "must" : [
+		                { "range" : { "points" : {"gte":200} } },
+		                { "missing" : { "field" : "allianceID" } }
+			        ]
+			     }
+		   },
+			"boost_mode": "replace",
+			"script_score" : {
+			    "params" : {
+			        "originX" : 16198,
+			        "originY" : 16527
+			    },
+			    "script" : "(abs(doc[\"mapX\"].value - originX) + abs(doc[\"mapX\"].value + doc[\"mapY\"].value - originX - originY) + abs(doc[\"mapY\"].value - originY)) / 2"
+			}
+		}
+    },
+    "sort" : [
+        {
+            "_score" : {
+				"order": "asc"
+            }
+        }
+    ]
+}'
+
+
+
+
+

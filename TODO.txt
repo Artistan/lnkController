@@ -1,0 +1,5 @@
+members closest to coordinates (average,min,max)
+castles closest to coordiantes (filter via allianceId, playerId, points range)
+
+
+

@@ -1,0 +1,35 @@
+{
+  "from" : 0, "size" : 100,
+  "query": {
+    "function_score":{
+      "query":  {
+        "range": {
+          "points": {
+            "gte" : 100,
+            "lte" : 1000
+          }
+        }
+      },
+      "boost_mode": "replace",
+      "script_score" : {
+        "params" : {
+          "originX" : 16413,
+          "originY" : 16252
+        },
+        "script" : "(abs(doc[\"mapX\"].value - originX) + abs(doc[\"mapX\"].value + doc[\"mapY\"].value - originX - originY) + abs(doc[\"mapY\"].value - originY)) / 2"
+      }
+    }
+  },
+  "filter": {
+    "bool" : {
+      "must" : [
+        { "missing" : { "field" : "allianceID" } }
+      ]
+    }
+  },
+  "sort": {
+    "rank": {
+      "order": "asc"
+    }
+  }
+}
